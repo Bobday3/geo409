@@ -97,7 +97,7 @@
                 [38.1970, -84.8630]
                 
             ];
-            var cityPops = [308428, 27453, 597337]; /* include 2nd and 3rd city pops here */
+            var cityPops = [308428, 597337,  27453]; /* include 2nd and 3rd city pops here */
             
             var cityAreas = [lexArea, louiseArea, frankArea]; /* include 2nd and 3rd city areas */
                     
@@ -106,14 +106,14 @@
             
         }
             
-        function mapCities(cities, cityCoords, cityAreas, cityPops) { 
+        function mapCities(cities, cityCoords, cityPops, cityAreas) { 
             
             var units = 'miles';
             
             for(var i = 0; i < cities.length; i++) {
-                var density 
-                    function calcPopDensity(CityPop, cityArea, units)
-
+               
+                var density = calcPopDensity(cityPops[i], cityAreas[i], units);
+                  console.log(cityPops[i], cityAreas[i]);
                 var popup = "<b>"+cities[i]+"</b><br>"+"<b>Density</b>: "+density.toLocaleString()+" people per sq " + units;
 
                 L.marker(cityCoords[i]).addTo(map)
@@ -122,11 +122,18 @@
             }
         }
         
-        function calcPopDensity(lexArea, cityPops[0], units){
-            var density 
-                function calcPopDensity
+        function calcPopDensity(cityPops, cityAreas, units){
+            if(units == "km"){
+            var density =cityPops/(cityAreas*2.589);
+                return density;
+            }else{
+            var density = cityPops/cityAreas;
+                return density;
+         }
             
-          
+        }
+        
+        
     </script>
     
 </body>
