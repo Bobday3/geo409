@@ -101,18 +101,17 @@
             
             var cityAreas = [lexArea, louiseArea, frankArea]; /* include 2nd and 3rd city areas */
                     
-            mapCities(cities, cityCoords, cityPops, cityAreas); 
+            mapCities(cities, cityCoords, cityPops, cityAreas); // watch out these need to be in the same order as in the function declaration.
             
             
         }
             
-        function mapCities(cities, cityCoords, cityAreas, cityPops) { 
+        function mapCities(cities, cityCoords, cityPops, cityAreas) { 
             
             var units = 'miles';
             
             for(var i = 0; i < cities.length; i++) {
-                var density 
-                    function calcPopDensity(CityPop, cityArea, units)
+                var density = calcPopDensity(cityPops[i],cityAreas[i],units);
 
                 var popup = "<b>"+cities[i]+"</b><br>"+"<b>Density</b>: "+density.toLocaleString()+" people per sq " + units;
 
@@ -122,10 +121,13 @@
             }
         }
         
-        function calcPopDensity(lexArea, cityPops[0], units){
-            var density 
-                function calcPopDensity
-            
+        function calcPopDensity(pop,area,units){
+            if(units == 'miles') {
+                return pop/area;
+            } else if(units == 'km') {
+               return pop/(area*1.60934*1.60934); // multiply conversion twice to account for sq
+            }
+        }
           
     </script>
     
