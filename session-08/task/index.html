@@ -73,20 +73,24 @@
         minZoom: 4,
         maxZoom: 12
     });
+        
     var OpenMapSurfer_Roads = L.tileLayer('http://openmapsurfer.uni-hd.de/tiles/roads/x={x}&y={y}&z={z}', {
 	minZoom: 0,
 	maxZoom: 20,
 	attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-});
+        
+}).addTo(map);
                 
     var redIguana = L.latLng(40.7718,-111.9124);
         
     map.on('click', function(e){
+        var currentCords = e.latlng;
+        
        var clicks = e.latlng;
-        var distance = clicks.distanceTo(redIguana);
+        var distance = currentCords.distanceTo(redIguana);
         console.log(distance);
         
-    var southWestCorner = map.getSouthWest();
+    var southWestCorner = map.getBounds().getSouthWest();
         console.log(southWestCorner);
         
         var distanceSouthWest = redIguana.distanceTo(southWestCorner);
