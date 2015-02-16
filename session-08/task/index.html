@@ -78,15 +78,16 @@
 	maxZoom: 20,
 	attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 });
-                
+    map.addLayer(OpenMapSurfer_Roads); // don't forget to add your tiles to the actual map           
     var redIguana = L.latLng(40.7718,-111.9124);
         
     map.on('click', function(e){
        var clicks = e.latlng;
+        map.setView(clicks, 6) // optional: recenter map
         var distance = clicks.distanceTo(redIguana);
         console.log(distance);
         
-    var southWestCorner = map.getSouthWest();
+    var southWestCorner = map.getBounds().getSouthWest(); // first you have to get the bounds, then the SW corner.
         console.log(southWestCorner);
         
         var distanceSouthWest = redIguana.distanceTo(southWestCorner);
