@@ -68,7 +68,7 @@
     <script>
 
    var map = L.map('map', {
-       center: [-37.8136, 143.9631],
+       center: [-37.832565, 144.982796],
        zoom: 10
    });
    
@@ -167,49 +167,79 @@
         ]; 
 
         
+        // create an object to hold default options
+        var iguanaOptions = {
+            color: "blue",
+            fillColor: "blue"       
+        };
+        // create an object to hold highlighted options
+        var iguanaThreatOptions = { 
+            color: 'orange', 
+            fillColor: 'orange'
+        };
         
-    var lz1Marker = L.circle([-37.854506, 144.797431],2200).addTo(map);
-    var lz2Marker = L.circle([-37.749253, 144.855108], 2200).addTo(map);
-    var lz3Marker = L.circle( [-37.770967, 144.943686], 2200).addTo(map);
-    var lz4Marker = L.circle([-37.720472, 145.002051], 2200).addTo(map);
-    var lz5Marker = L.circle([-37.774767, 145.033635],2200).addTo(map);
-    var lz6Marker = L.circle([-37.827394, 145.040503],2200).addTo(map);
-    var lz7Marker = L.circle([-37.767711, 145.116720],2200).addTo(map);
-    var lz8Marker = L.circle([-37.829563, 145.129767],2200).addTo(map);
-    var lz9marker = L.circle([-37.779108, 145.749365],2200).addTo(map);
-    var lz10Marker = L.circle([-37.868059, 145.0714022],2200).addTo(map);
-    var lz11Marker = L.circle([-37.932565, 145.080328],2200).addTo(map);
-    var lz12Marker =L.circle([-37.873479, 145.1963717],2200).addTo(map);
-  
-        var iguanaGroup = L.layerGroup([lz1Marker,lz2Marker,lz3Marker,lz4Marker,lz5Marker,lz6Marker,lz6Marker,lz7Marker,lz8Marker,lz9marker,lz10Marker,lz11Marker,lz12Marker],{
-        }).addTo(map);
-    
-        var marker; 
-       
-      map.on('click', function(e) {  
-
-          
-            if(map.hasLayer(marker)) {  
-                console.log('marker is present');
+        // create a new layergroup to hold circles
+        var iguanaGroup = L.layerGroup();
+        
+        // for each object in our array of data
+        for(var i=0; i<iguanaZones.length; i++) {
+            
+            // create a new circle and add it to the iguanaGroup layer
+            var iguanaColony = L.circle(iguanaZones[i].coordinates,
+                                iguanaZones[i].properties.size,
+                                iguanaOptions)
+                                .addTo(iguanaGroup); 
+        }
+        
+        // add the inguanaGroup to the map
+        iguanaGroup.addTo(map);
+        
+        // declare an undefined variable
+        var marker;
+        
+       // when the user clicks on the map
+        map.on('click', function(e) { 
+            // if the marker exists and is defined
+            if(map.hasLayer(marker)) { 
+               // remove it from the map
                 map.removeLayer(marker);
             }
-      
-          var clickLatLong = (e.latlng);
-         marker = L.marker(clickLatLong);
-          marker.addTo(map);
-          return [clickLatLong];
             
-        });  
+            // store the click coordinates in a variable
+            var clickCoords = e.latlng; 
+            
+            // create a marker using those coods, 
+            // add it to the map and assign it
+            // to the existing variable marker
+            marker = L.marker(clickCoords).addTo(map);
+            
+            // call the function and pass the marker's coords
+            testDistance(clickCoords);
         
-      //  function testDistance() {
+        });
+        
+        // function parameter is the coords passed from the caller
+        function testDistance(testCoords) { 
             
-        //    iguanaGroup.eachLayer(function(layer) if (getRadius(layer.latlng) > marker = true)
-  //          { iguanaGroup.setOpacity(1)}
+            // iterate through eacy layer of the iguanaGroup
+            iguanaGroup.eachLayer(function(layer) {
+               
+                // determine distance between marker and layer
+                var distance = testCoords.distanceTo(layer.getLatLng());
                 
-                
-
-  //          });
-  //      }
+                // subtract radius from distance
+                distance = distance - layer.getRadius();
+               
+                // if that distance is too close
+                if(distance < 2200) {
+                    // change the layer option to indicate a threat
+                    layer.setStyle(iguanaThreatOptions);
+                } else {
+                    // otherwise, ensure layer options are still default
+                    layer.setStyle(iguanaOptions); 
+                }
+            });
+        }
         
 
         
